@@ -16,6 +16,7 @@ localStorage.setItem("sesion_carrito_dulcitos", sessionId);
 let productos = [];
 
 let carrito = [];
+let productoActual = null; // Variable para almacenar el producto del modal
 
 // === FUNCIÓN DE REGISTRO UNIFICADA (Local + Google Sheets) ===
 // AGREGADO: parámetro elementoClicado
@@ -175,6 +176,8 @@ function abrirModalAlfajores(idProducto) {
     alfajorSeleccionadoId = idProducto;
     const producto = productos.find(p => p.id === idProducto);
     
+    productoActual = producto; // GUARDAMOS EL PRODUCTO ACTUAL PARA USARLO AL CONFIRMAR
+    
     document.getElementById("titulo-modal-alfajores").innerText = `Selecciona la cantidad de ${producto.nombre}`;
     document.getElementById("modal-alfajores").style.display = "flex";
 }
@@ -185,23 +188,37 @@ function cerrarModalAlfajores() {
 }
 
 function confirmarAgregarAlfajor() {
-    const opciones = document.getElementsByName("cantidad-alfajor");
-    let precioSeleccionado = 0;
-    let textoSeleccion = "";
-    
-    for (let i = 0; i < opciones.length; i++) {
-        if (opciones[i].checked) {
-            precioSeleccionado = parseFloat(opciones[i].getAttribute("data-precio"));
-            textoSeleccion = opciones[i].getAttribute("data-texto");
-            break;
-        }
+    const radioSeleccionado = document.querySelector('input[name="cantidad-alfajor"]:checked');
+    if (!radioSeleccionado) return;
+
+    if (!productoActual) {
+        console.error("Error: no se detectó el productoActual");
+        return;
     }
+
+    const cantidadUnidades = Number(radioSeleccionado.getAttribute('data-cantidad')); // 6, 12 o 24
+    const textoCantidad = radioSeleccionado.getAttribute('data-texto'); // "Por 6 unidades"
     
-    const productoAlfajor = productos.find(p => p.id === alfajorSeleccionadoId);
-    const nombreConCantidad = `${productoAlfajor.nombre} (${textoSeleccion})`;
-    
-    insertarEnCarrito(nombreConCantidad, precioSeleccionado);
-    cerrarModalAlfajores();
+    const precioUnitario = Number(productoActual.precio || productoActual.Precio); // Viene de Google Sheets [cite: 14]
+    const precioTotal = precioUnitario * cantidadUnidades; // Calcula el total [cite: 14]
+
+    const itemCarrito = {
+        nombre: `${productoActual.nombre} (${textoCantidad})`,
+        precio: precioTotal
+    };
+
+    if (typeof carrito !== 'undefined') {
+        carrito.push(itemCarrito);
+        
+        let totalCarritos = parseInt(localStorage.getItem("stats_total_carritos") || 0) + 1;
+        localStorage.setItem("stats_total_carritos", totalCarritos);
+
+        registrarAccionAdmin(itemCarrito.nombre, "🛒 Agregó alfajor al carrito", precioTotal);
+
+        actualizarVistaCarrito();
+        document.getElementById("seccion-carrito-desplegable").style.display = "block";
+        cerrarModalAlfajores();
+    }
 }
 
 // === LÓGICA DEL CARRITO ===
@@ -344,13 +361,12 @@ document.getElementById("btn-whatsapp").addEventListener("click", () => {
     if (inputTitular) inputTitular.value = "";
     if (inputWsp) inputWsp.value = "";
 
-    // Recargaur la página después de 2 segundos
+    // Recargar la página después de 2 segundos
     setTimeout(() => {
         location.reload();
     }, 2000);
 });
 
-// Función para mostrar el cartel de pedido confirmado
 // Al cargar la página, inicializar el catálogo y carrito
 window.addEventListener("DOMContentLoaded", () => {
     cargarCatalogo();
@@ -363,13 +379,12 @@ async function cargarCatalogo() {
     contenedor.innerHTML = "<p style='grid-column: span 4; text-align: center;'>Cargando productos...</p>";
 
     try {
-        // Hacemos la petición GET a tu Google Script indicando que queremos los productos activos
         const respuesta = await fetch(URL_GOOGLE_SHEET + "?productos=1");
         const datos = await respuesta.json();
 
         if (datos && Array.isArray(datos)) {
-            productos = datos; // Reemplazamos el array vacío con los datos de Google Sheets
-            filtrarCatalogo("Todo"); // Dibujamos los productos en la pantalla
+            productos = datos; 
+            filtrarCatalogo("Todo"); 
         } else {
             contenedor.innerHTML = "<p style='grid-column: span 4; text-align: center;'>No se encontraron productos activos.</p>";
         }
