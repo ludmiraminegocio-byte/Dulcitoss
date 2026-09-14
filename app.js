@@ -312,7 +312,6 @@ document.getElementById("btn-whatsapp").addEventListener("click", () => {
         return;
     }
 
-    // Preparar el mensaje para WhatsApp
     let textoMensaje = "¡Hola! Quiero confirmar este pedido:\n\n";
     let total = 0;
 
@@ -329,39 +328,31 @@ document.getElementById("btn-whatsapp").addEventListener("click", () => {
     const numeroWhatsApp = "5493424279070"; 
     const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(textoMensaje)}`;
 
-    // Registrar el pedido en Google Sheets (sin esperar respuesta)
     fetch(URL_GOOGLE_SHEET, {
         method: 'POST',
         body: JSON.stringify({
             tipo_accion: "comprar_whatsapp",
             id_sesion: sessionId,
             titular: nombreTitular,
-            whatsapp: numeroWsp
+            whatsapp: numeroWsp,
+            precio: total // <-- Esto guarda el monto total en la columna Precio (D)
         }),
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }
     }).catch(error => console.log("Error registrando compra:", error));
 
-    // Abrir WhatsApp
     window.open(urlWhatsApp, '_blank');
 
-    // Cerrar el carrito (sidebar)
     const sidebar = document.querySelector('.sidebar');
-    if (sidebar) {
-        sidebar.classList.remove('activo');
-    }
+    if (sidebar) sidebar.classList.remove('activo');
 
-    // Mostrar mensaje de éxito temporalmente
     alert("¡Gracias por tu compra! Se abrió WhatsApp en otra pestaña.");
 
-    // Vaciar el carrito
     carrito = [];
     actualizarVistaCarrito();
 
-    // Limpiar los campos del formulario
     if (inputTitular) inputTitular.value = "";
     if (inputWsp) inputWsp.value = "";
 
-    // Recargar la página después de 2 segundos
     setTimeout(() => {
         location.reload();
     }, 2000);
