@@ -427,45 +427,42 @@
         </div>
     </div>
 
-    <!-- MODAL SELECCIÓN CANTIDAD DE ALFAJORES -->
-    <div id="modal-alfajores" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="titulo-modal-alfajores">Selecciona las unidades</h2>
-                <button class="btn-cerrar-modal" onclick="cerrarModalAlfajores()">&times;</button>
-            </div>
-            
-            <div style="margin: 20px 0; text-align: left; display: flex; flex-direction: column; gap: 12px;">
-                <label style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 16px; color: #4a2c35; border-bottom: 1px solid #fce6ec; padding-bottom: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <input type="radio" name="cantidad-alfajor" data-precio="3000" data-texto="Por 6 unidades" checked style="transform: scale(1.2); cursor: pointer;">
-                        Por 6 unidades
-                    </div>
-                    <strong>$3000</strong>
-                </label>
-                
-                <label style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 16px; color: #4a2c35; border-bottom: 1px solid #fce6ec; padding-bottom: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <input type="radio" name="cantidad-alfajor" data-precio="5500" data-texto="Por 12 unidades" style="transform: scale(1.2); cursor: pointer;">
-                        Por 12 unidades
-                    </div>
-                    <strong>$5500</strong>
-                </label>
-                
-                <label style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 16px; color: #4a2c35;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <input type="radio" name="cantidad-alfajor" data-precio="10000" data-texto="Por 24 unidades" style="transform: scale(1.2); cursor: pointer;">
-                        Por 24 unidades
-                    </div>
-                    <strong>$10000</strong>
-                </label>
-            </div>
-            
-            <button onclick="confirmarAgregarAlfajor()" style="width: 100%; padding: 12px; background-color: #f7c3d3; color: #4a2c35; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px;">
-                Agregar al Carrito
-            </button>
+   <!-- MODAL SELECCIÓN CANTIDAD DE ALFAJORES -->
+<div id="modal-alfajores" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="titulo-modal-alfajores">Selecciona las unidades</h2>
+            <button class="btn-cerrar-modal" onclick="cerrarModalAlfajores()">&times;</button>
         </div>
+        
+        <div style="margin: 20px 0; text-align: left; display: flex; flex-direction: column; gap: 12px;">
+            <label style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 16px; color: #4a2c35; border-bottom: 1px solid #fce6ec; padding-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="radio" name="cantidad-alfajor" data-cantidad="6" data-texto="Por 6 unidades" checked style="transform: scale(1.2); cursor: pointer;">
+                    Por 6 unidades
+                </div>
+            </label>
+            
+            <label style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 16px; color: #4a2c35; border-bottom: 1px solid #fce6ec; padding-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="radio" name="cantidad-alfajor" data-cantidad="12" data-texto="Por 12 unidades" style="transform: scale(1.2); cursor: pointer;">
+                    Por 12 unidades
+                </div>
+            </label>
+            
+            <label style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 16px; color: #4a2c35;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="radio" name="cantidad-alfajor" data-cantidad="24" data-texto="Por 24 unidades" style="transform: scale(1.2); cursor: pointer;">
+                    Por 24 unidades
+                </div>
+            </label>
+        </div>
+        
+        <button onclick="confirmarAgregarAlfajor()" style="width: 100%; padding: 12px; background-color: #f7c3d3; color: #4a2c35; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px;">
+            Agregar al Carrito
+        </button>
     </div>
+</div>
 
     <!-- MODAL VER IMAGEN Y DESCRIPCIÓN -->
     <div id="modal-producto" class="modal-producto-overlay" onclick="cerrarModalProducto()">
